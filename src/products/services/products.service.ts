@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { Product } from 'src/entities/product.entity';
+import { Product } from '../entities/product.entity';
 // luego de importar el arcchivo con la configuracion para utilizarlos debemos irnos al metodo
 // create y en el payload o la variable que recibe los datos desde la url cambiarle el tipo de
 // dato por el de la importacion (lee linea 45)
@@ -12,11 +12,11 @@ export class ProductsService {
   private products: Product[] = [
     {
       id: 1,
-      name: 'Product 1',
-      description: 'esta es una descripccion',
-      price: 1233,
-      stock: 12,
-      image: '',
+      name: 'Producto 1',
+      description: 'lorem lorem',
+      price: 10000,
+      stock: 300,
+      image: 'https://i.imgur.com/U4iGx1j.jpeg',
     },
   ];
 
@@ -42,7 +42,7 @@ export class ProductsService {
 
   // metodo para crear un producto, en este caso como estamos trabajando en memoria y el ID debe estar
   // dado por la BD, para solucionar eso creamos una variable contadora counterID la cual incrementamos
-  create(payload: CreateProductDto) {
+  create(data: CreateProductDto) {
     // incrementamos la variable counterID
     this.counterID = this.counterID + 1;
     // Creamos nuestro nuevo producto
@@ -50,7 +50,7 @@ export class ProductsService {
       // le asignamos a id el incremento de counterID
       id: this.counterID,
       // con los tres puntos (...) concatenamos otro arreglo en este caso payload que tiene los demas datos
-      ...payload,
+      ...data,
     };
     // ya luego de crear el nuevo producto lo insertarmos en nuestro arreglo de porductos con el metodo
     // push en el cual le pasamos como parametro el nuevo producto
@@ -59,30 +59,25 @@ export class ProductsService {
     return newProduct;
   }
 
-  update(id: number, payload: UpdateProductDto) {
+  update(id: number, changes: UpdateProductDto) {
     // Reutilizamos codigo esto quiere decir que usamos el metodo findOne para encontrar ese producto
     // por su id el cual lo guardamos en la variable productFound
     const product = this.findOne(id);
-    // Realizamos una condicion la cual sera true si la variable productFound tiene algun dato
-    if (product) {
-      // Aqui encontramos el index o la posicion del producto en el arreglo con el metodo
-      // findIndex y pasandole como recorrido una variable item la cual si es igual al id
-      // guarda ese index en la varibale index
-      const index = this.products.findIndex((item) => item.id === id);
-      // aqui actualizamos en la posicion del arreglo los datos que vienen desde el usuario con
-      // la variable payload, this.products[index] = payload; de esta forma estariamos reemplazando
-      // el elemento completo es decir si el usuario envia solamente un atributo eso es lo que se
-      // guardaria para arrglar esto debemos hacer un merge de la informacion obtenida con la que va
-      // a reemplazar por ejemplo
-      this.products[index] = {
-        ...product,
-        ...payload,
-      };
-      // terminamos el metodo retornando la entidad actualizada
-      return this.products[index];
-    }
-    // si no se cumple el if solo retornaria un null
-    return null;
+    // Aqui encontramos el index o la posicion del producto en el arreglo con el metodo
+    // findIndex y pasandole como recorrido una variable item la cual si es igual al id
+    // guarda ese index en la varibale index
+    const index = this.products.findIndex((item) => item.id === id);
+    // aqui actualizamos en la posicion del arreglo los datos que vienen desde el usuario con
+    // la variable payload, this.products[index] = payload; de esta forma estariamos reemplazando
+    // el elemento completo es decir si el usuario envia solamente un atributo eso es lo que se
+    // guardaria para arrglar esto debemos hacer un merge de la informacion obtenida con la que va
+    // a reemplazar por ejemplo
+    this.products[index] = {
+      ...product,
+      ...changes,
+    };
+    // terminamos el metodo retornando la entidad actualizada
+    return this.products[index];
   }
 
   remove(id: number) {

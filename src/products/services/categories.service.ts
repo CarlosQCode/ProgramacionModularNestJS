@@ -1,14 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateCategoryDto, UpdateCategoryDto } from 'src/dtos/category.dtos';
-import { Category } from 'src/entities/category.entity';
+
+import { Category } from '../entities/category.entity';
+import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/category.dtos';
 
 @Injectable()
 export class CategoriesService {
-  private counterID = 1;
+  private counterId = 1;
   private categories: Category[] = [
     {
       id: 1,
-      description: 'Esta es la descripcion de categorias',
+      name: 'Category 1',
     },
   ];
 
@@ -24,27 +25,24 @@ export class CategoriesService {
     return category;
   }
 
-  create(payload: CreateCategoryDto) {
-    this.counterID = this.counterID + 1;
+  create(data: CreateCategoryDto) {
+    this.counterId = this.counterId + 1;
     const newCategory = {
-      id: this.counterID,
-      ...payload,
+      id: this.counterId,
+      ...data,
     };
     this.categories.push(newCategory);
     return newCategory;
   }
 
-  update(id: number, payload: UpdateCategoryDto) {
+  update(id: number, changes: UpdateCategoryDto) {
     const category = this.findOne(id);
-    if (category) {
-      const index = this.categories.findIndex((item) => item.id === id);
-      this.categories[index] = {
-        ...category,
-        ...payload,
-      };
-      return this.categories[index];
-    }
-    return null;
+    const index = this.categories.findIndex((item) => item.id === id);
+    this.categories[index] = {
+      ...category,
+      ...changes,
+    };
+    return this.categories[index];
   }
 
   remove(id: number) {

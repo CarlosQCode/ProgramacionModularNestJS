@@ -17,7 +17,7 @@ import {
 
 // importamos el pipe creado por nosotros, en la linea 12 comentamos el pipe que utilizamos
 // por defecto desde nest
-import { ParseIntPipe } from './../common/parse-int.pipe';
+import { ParseIntPipe } from '../../common/parse-int.pipe';
 // importamos el DTO en cual no dara una validacion de que si se reciban los datos con estos tipos de datos
 // solo tenemos que cambiar en los tipos de datos de payload en em metodo create por el DTO importado,
 // Tambien podemos utilizar en el servicio para que se asegure que se utilizara esta estruturapara eso
@@ -25,7 +25,7 @@ import { ParseIntPipe } from './../common/parse-int.pipe';
 import { CreateProductDto, UpdateProductDto } from '../dtos/products.dtos';
 
 // Para hacer la injeccion del servicio primero debemos importar el servicio (lee la linea 22)
-import { ProductsService } from './../services/products.service';
+import { ProductsService } from '../services/products.service';
 
 @Controller('products')
 export class ProductsController {
