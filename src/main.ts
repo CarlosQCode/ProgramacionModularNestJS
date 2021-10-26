@@ -44,6 +44,8 @@ async function bootstrap() {
   // podamos consumir desde front-end especificos
   app.enableCors();
 
+  // En esta linea le colocamos que escuche la variable de entorno que viene en los archivos de ambiestes o si no que esciche
+  // por el puesto 3000
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
