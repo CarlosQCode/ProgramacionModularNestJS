@@ -7,6 +7,11 @@ import { ValidationPipe } from '@nestjs/common';
 // hacer lo sigueinte (lee linea 12)
 import { AppModule } from './app.module';
 
+// Esta viene de lectura del cuaderno el tema - Documentacion del prpyecto integracion de swagger y partialtype con open api
+// Luego de instalar los paquetes debemos importarlos a arhivo
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+// para luego reaizar las configuraciones que os dicen en la documentacion de nestjs. sigue en la linea 33
+
 // vamos a validar que en la data no nos envien datos malisiosos, eso quiere decir que todos los
 // datos que nos envian mendian la creacion los toman, pero podemos validar eso con el ValidationPipe
 // para ello le enviamos algunas opciones en el EJemplo linea(17 parametros del ValidatioPipe)
@@ -24,6 +29,21 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  await app.listen(3000);
+
+  // Lineas para la configuracion de la documentacion de la API con OPEN API
+  const config = new DocumentBuilder()
+    .setTitle('API')
+    .setDescription('PLATZI STORE')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
+
+  // Habilitamos las cors para que al momento de hacer deploy en heroku podamos consumir este proyecto desde cualquier parte
+  // para eso le decimos a app que habilite la cors(), averiguar como podemos pasarle configuraciones para que solo
+  // podamos consumir desde front-end especificos
+  app.enableCors();
+
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

@@ -20,6 +20,11 @@ import { enviroments } from './enviroments';
 import config from './config';
 // y cargarlo el paquete en los imports linea 51
 
+// Viene de lectura del cuaderno -- Validacion de eschemas
+import * as Joi from 'joi';
+// antes de importar esta linea instalamos con npm el paquete Joi con el comando npm i --save joi
+// ya que lo hemos instalado he importado, para utlizarlos debemos de decirle en los imports que vamos a validar eschemas
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -50,6 +55,11 @@ import { DatabaseModule } from './database/database.module';
       envFilePath: enviroments[process.env.NODE_ENV] || '.env',
       load: [config],
       isGlobal: true,
+      validationSchema: Joi.object({
+        API_KEY: Joi.number().required(),
+        DATABASE_NAME: Joi.string().required(),
+        DATABASE_PORT: Joi.number().required(),
+      }),
     }),
     UsersModule,
     ProductsModule,

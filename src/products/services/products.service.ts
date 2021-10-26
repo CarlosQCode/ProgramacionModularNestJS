@@ -4,7 +4,7 @@ import { Product } from '../entities/product.entity';
 // luego de importar el arcchivo con la configuracion para utilizarlos debemos irnos al metodo
 // create y en el payload o la variable que recibe los datos desde la url cambiarle el tipo de
 // dato por el de la importacion (lee linea 45)
-import { CreateProductDto, UpdateProductDto } from '../dtos/products.dtos';
+import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 
 @Injectable()
 export class ProductsService {

@@ -22,11 +22,14 @@ import { ParseIntPipe } from '../../common/parse-int.pipe';
 // solo tenemos que cambiar en los tipos de datos de payload en em metodo create por el DTO importado,
 // Tambien podemos utilizar en el servicio para que se asegure que se utilizara esta estruturapara eso
 // nos vamos a archivo products.service e importamos en DTO, lo mismo para el UpdateProductDto
-import { CreateProductDto, UpdateProductDto } from '../dtos/products.dtos';
+import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 
 // Para hacer la injeccion del servicio primero debemos importar el servicio (lee la linea 22)
 import { ProductsService } from '../services/products.service';
 
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
+
+@ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   // segue de la linea 17 ---  despues de importar debemos definir en el constructor que
@@ -47,6 +50,7 @@ export class ProductsController {
 
   // Obteniendo los query params y utiliznado el limit y el offset directamente
   @Get()
+  @ApiOperation({ summary: 'List all products' })
   // Se pueden enviar valores por defecto asignandole a la varible el valor
   // por defecto al darle valores por defecto TS no da error de tipado
   // @Query('limit') limit: number = 100, este da error de tipado por defecto
@@ -65,6 +69,7 @@ export class ProductsController {
   // subor el metodo o el endPoint de la ruta fija antes de endPoint donde se recibe
   // un params
   @Get('filter')
+  @ApiOperation({ summary: 'this is filter' })
   getProductFilter() {
     return {
       message: `Yo soy un filtro!`,
@@ -83,6 +88,7 @@ export class ProductsController {
   // Para ello debemo importarlos desde nestjs/common y utilizarlos en el metodo que querramos en este caso
   // vamos a cambiar la respuesta http de este metodo que nos manda un 200
   @Get(':productId')
+  @ApiOperation({ summary: 'List one product' })
   @HttpCode(HttpStatus.ACCEPTED)
   // podemos hacer uso de los pipes para ya sea convertir un valor que viene dela url
   // como parametro o mostrar un error sin necesidad de realizar una consulta a la bd
@@ -114,6 +120,7 @@ export class ProductsController {
   // para enviar datos utilizaremos el decorador @Body el cual
   // se encarga de tomar una porcion del cuerpo que se envia
   @Post()
+  @ApiOperation({ summary: 'Created one product' })
   create(@Body() payload: CreateProductDto) {
     //return {
     //  message: 'Accion de crear',
@@ -134,6 +141,7 @@ export class ProductsController {
 
   // Metodo para actualizar con el decorador @put
   @Put(':id')
+  @ApiOperation({ summary: 'Update one product' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateProductDto,
@@ -148,6 +156,7 @@ export class ProductsController {
 
   // Metodo para eliminar con el decorador @Delete
   @Delete(':id')
+  @ApiOperation({ summary: 'Deleted one product' })
   delete(@Param('id', ParseIntPipe) id: number) {
     //return {
     //  message: 'Eliminar producto especifico',

@@ -14,29 +14,37 @@ import {
 } from 'class-validator';
 // cuando tengamos la validaciones para que puedan ser activadas debemos importarlas en el
 // archivo principal (main.ts) (lee el archivo main.ts)
-import { PartialType } from '@nestjs/mapped-types';
+//import { PartialType } from '@nestjs/mapped-types';
+// En esta linea la importacion la cambiamos de mapped-types a swagger ya que debemos utilizar el paquete
+// swagger para que en la documentacion de nuestra API podamos usar los DTOS que hemos creados
+import { PartialType, ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
+  @ApiProperty({ description: 'the name of product' })
   readonly name: string;
 
   @IsString()
   @IsNotEmpty()
+  @ApiProperty({ description: 'the description of product' })
   readonly description: string;
 
   @IsNumber()
   @IsNotEmpty()
   @IsPositive()
+  @ApiProperty({ description: 'the price of product' })
   readonly price: number;
 
   @IsNumber()
   @IsNotEmpty()
   @IsPositive()
+  @ApiProperty({ description: 'the stock of product' })
   readonly stock: number;
 
   @IsUrl()
   @IsNotEmpty()
+  @ApiProperty({ description: 'the image of product' })
   readonly image: string;
 }
 
